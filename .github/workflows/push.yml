@@ -36,7 +36,7 @@ jobs:
         run: |
           set -eux
           
-          IMAGE_ID=glassechidna/artifact-cleaner
+          IMAGE_ID=${{secrets.DOCKERHUB_USER}}/artifact-cleaner
 
           # Strip git ref prefix from version
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')

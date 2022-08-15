@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/google/go-github/v29/github"
+	"github.com/google/go-github/v45/github"
 	"github.com/google/go-querystring/query"
 	"net/url"
 	"reflect"
@@ -82,33 +82,33 @@ type workflowRuns struct {
 }
 
 type WorkflowRun struct {
-	ID             int                     `json:"id"`
-	NodeID         string                  `json:"node_id"`
-	HeadBranch     string                  `json:"head_branch"`
-	HeadSha        string                  `json:"head_sha"`
-	RunNumber      int                     `json:"run_number"`
-	CheckSuiteID   int                     `json:"check_suite_id"`
-	Event          string                  `json:"event"`
-	Status         string                  `json:"status"`
-	Conclusion     string                  `json:"conclusion"`
-	URL            string                  `json:"url"`
-	HTMLURL        string                  `json:"html_url"`
-	PullRequests   []interface{}           `json:"pull_requests"`
-	CreatedAt      time.Time               `json:"created_at"`
-	UpdatedAt      time.Time               `json:"updated_at"`
-	JobsURL        string                  `json:"jobs_url"`
-	LogsURL        string                  `json:"logs_url"`
-	ArtifactsURL   string                  `json:"artifacts_url"`
-	CancelURL      string                  `json:"cancel_url"`
-	RerunURL       string                  `json:"rerun_url"`
-	WorkflowURL    string                  `json:"workflow_url"`
-	HeadCommit     *github.PushEventCommit `json:"head_commit"`
-	Repository     *github.Repository      `json:"repository"`
-	HeadRepository *github.Repository      `json:"head_repository"`
+	ID             int                `json:"id"`
+	NodeID         string             `json:"node_id"`
+	HeadBranch     string             `json:"head_branch"`
+	HeadSha        string             `json:"head_sha"`
+	RunNumber      int                `json:"run_number"`
+	CheckSuiteID   int                `json:"check_suite_id"`
+	Event          string             `json:"event"`
+	Status         string             `json:"status"`
+	Conclusion     string             `json:"conclusion"`
+	URL            string             `json:"url"`
+	HTMLURL        string             `json:"html_url"`
+	PullRequests   []interface{}      `json:"pull_requests"`
+	CreatedAt      time.Time          `json:"created_at"`
+	UpdatedAt      time.Time          `json:"updated_at"`
+	JobsURL        string             `json:"jobs_url"`
+	LogsURL        string             `json:"logs_url"`
+	ArtifactsURL   string             `json:"artifacts_url"`
+	CancelURL      string             `json:"cancel_url"`
+	RerunURL       string             `json:"rerun_url"`
+	WorkflowURL    string             `json:"workflow_url"`
+	PushEvent      *github.PushEvent  `json:"head_commit"`
+	Repository     *github.Repository `json:"repository"`
+	HeadRepository *github.Repository `json:"head_repository"`
 }
 
 type workflowRunArtifacts struct {
-	TotalCount int        `json:"total_count"`
+	TotalCount int         `json:"total_count"`
 	Artifacts  []*Artifact `json:"artifacts"`
 }
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/google/go-github/v29/github"
+	"github.com/google/go-github/v45/github"
 	"golang.org/x/oauth2"
 	"os"
 	"strconv"
@@ -23,6 +23,9 @@ func main() {
 	minAge, _ := strconv.ParseFloat(os.Getenv("INPUT_MINIMUMAGE"), 64)
 	name := os.Getenv("INPUT_NAME")
 
+	dryRun := os.Getenv("DRY_RUN")
+	keyword := os.Getenv("KEYWORD")
+
 	ownerRepo := os.Getenv("INPUT_REPOSITORY")
 	if len(ownerRepo) == 0 {
 		ownerRepo = os.Getenv("GITHUB_REPOSITORY")
@@ -33,30 +36,42 @@ func main() {
 	repo := split[1]
 
 	err := forEachArtifact(ctx, client, owner, repo, func(ctx context.Context, artifact *Artifact, run *WorkflowRun) (bool, error) {
+		stop := true
+
 		if artifact.SizeInBytes < minDeletionSize {
-			return false, nil
+			return !stop, nil
 		}
 
 		age := time.Now().Sub(artifact.CreatedAt)
 		if age.Seconds() < minAge {
-			return false, nil
+			return !stop, nil
 		}
 
 		if len(name) > 0 && name != artifact.Name {
-			return false, nil
+			return !stop, nil
 		}
 
-		fmt.Printf("Deleting %s\n", artifact.URL)
+		if len(keyword) > 0 && !strings.Contains(artifact.Name, keyword) {
+			return !stop, nil
+		}
+
+		fmt.Printf("Deleting %s, %s\n", artifact.Name, artifact.URL)
+
+		if dryRun != "" {
+			return !stop, nil
+		}
+
 		resp, err := client.DeleteWorkflowArtifact(ctx, artifact.URL)
 		if err != nil {
-			return true, err
+			return stop, err
 		}
 
 		if resp.StatusCode != 204 {
-			return true, errors.New(fmt.Sprintf("Unexpected status code deleting artifact: %d", resp.StatusCode))
+			return stop, errors.New(fmt.Sprintf("Unexpected status code deleting artifact: %d", resp.StatusCode))
 		}
 
-		return false, nil
+		fmt.Printf("Deleted\n")
+		return !stop, nil
 	})
 	if err != nil {
 		panic(err)
