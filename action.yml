@@ -29,7 +29,15 @@ inputs:
     description: ""
     required: false
     default: ${{ github.token }}
+  dryRun:
+    description: dry run the action
+    required: false
+    default: "true"
+  keyword:
+    description: will delete the artifacts which name contains the keyword
+    required: false
+    default: ""
 
 runs:
   using: docker
-  image: docker://glassechidna/artifact-cleaner
+  image: docker://ethinx88/artifact-cleaner
