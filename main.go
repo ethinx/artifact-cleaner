@@ -23,8 +23,8 @@ func main() {
 	minAge, _ := strconv.ParseFloat(os.Getenv("INPUT_MINIMUMAGE"), 64)
 	name := os.Getenv("INPUT_NAME")
 
-	dryRun := os.Getenv("DRY_RUN")
-	keyword := os.Getenv("KEYWORD")
+	dryRun := os.Getenv("INPUT_DRY_RUN")
+	keyword := os.Getenv("INPUT_KEYWORD")
 
 	ownerRepo := os.Getenv("INPUT_REPOSITORY")
 	if len(ownerRepo) == 0 {
